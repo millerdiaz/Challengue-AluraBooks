@@ -37,16 +37,17 @@ public class PrincipalApp implements CommandLineRunner {
             int choice = getUserChoice(scanner);
 
             switch (choice) {
-                case 1 -> searchBooks(scanner);
-                case 2 -> showBooks();
-                case 3 -> deleteBook(scanner);
-                case 4 -> showAuthorsByBook(scanner);
-                case 5 -> showAllAuthors();
-                case 6 -> showBooksByLanguage(scanner);
-                case 7 -> showAuthorsAliveInYear(scanner);
-                case 0 -> exit(); // Agregar caso 0 para salir
+                case 1 -> findBooks(scanner); // searchBooks
+                case 2 -> displayBooks(); // showBooks
+                case 3 -> removeBook(scanner); // deleteBook
+                case 4 -> listAuthorsByBook(scanner); // showAuthorsByBook
+                case 5 -> listAllAuthors(); // showAllAuthors
+                case 6 -> displayBooksByLanguage(scanner); // showBooksByLanguage
+                case 7 -> listAuthorsAliveInYear(scanner); // showAuthorsAliveInYear
+                case 0 -> quit(); // exit
                 default -> System.out.println("Opción no válida.");
             }
+
 
         }
     }
@@ -84,7 +85,7 @@ public class PrincipalApp implements CommandLineRunner {
     }
 
     // Método para buscar libros y mostrar resultados
-    private void searchBooks(Scanner scanner) {
+    private void findBooks(Scanner scanner) {
         System.out.print("¿Cual es el libro que estas buscando? ");
         String query = scanner.nextLine();
         List<GutendexResponse.Book> books = gutendexService.searchBooksByTitle(query);
@@ -113,7 +114,7 @@ public class PrincipalApp implements CommandLineRunner {
 
     // Mostrar libros guardados con formato
     @Transactional
-    public void showBooks() {
+    public void displayBooks() {
         List<BookDTO> books = bookService.getAllBooksDTO();
         if (books.isEmpty()) {
             System.out.println("No existen libros guardados.");
@@ -131,7 +132,7 @@ public class PrincipalApp implements CommandLineRunner {
     }
 
     // Eliminar un libro
-    private void deleteBook(Scanner scanner) {
+    private void removeBook(Scanner scanner) {
         System.out.print("Ingresa el ID del libro que quieres eliminar: ");
         Long id = null;
         boolean validId = false;
@@ -151,7 +152,7 @@ public class PrincipalApp implements CommandLineRunner {
 
     // Mostrar autores por libro
     @Transactional
-    public void showAuthorsByBook(Scanner scanner) {
+    public void listAuthorsByBook(Scanner scanner) {
         System.out.print("Ingresa el ID del libro: ");
         Long bookId = getValidLong(scanner);
         List<AuthorDTO> authors = authorService.getAuthorsByBookId(bookId);
@@ -177,7 +178,7 @@ public class PrincipalApp implements CommandLineRunner {
 
     // Mostrar todos los autores
     @Transactional
-    public void showAllAuthors() {
+    public void listAllAuthors() {
         List<AuthorDTO> authors = authorService.getAllAuthors();
         if (authors.isEmpty()) {
             System.out.println("No hay autores registrados.");
@@ -201,7 +202,7 @@ public class PrincipalApp implements CommandLineRunner {
 
 
     // Salir de la aplicación
-    private void exit() {
+    private void quit() {
         System.out.println("Saliendo, gracias por tu visita.");
         System.exit(0);
     }
@@ -266,7 +267,7 @@ public class PrincipalApp implements CommandLineRunner {
 
 
     // Mostrar cantidad de libros por idioma
-    private void showBooksByLanguage(Scanner scanner) {
+    private void displayBooksByLanguage(Scanner scanner) {
         System.out.print("Ingrese los idiomas separados por coma (por ejemplo, 'en,es,fr'): ");
         String input = scanner.nextLine();
         String[] languages = input.split(",");
@@ -284,7 +285,7 @@ public class PrincipalApp implements CommandLineRunner {
     }
 
     // Mostrar autores vivos en un año específico
-    private void showAuthorsAliveInYear(Scanner scanner) {
+    private void listAuthorsAliveInYear(Scanner scanner) {
         System.out.print("Ingrese el año para buscar autores vivos: ");
         int year;
         try {
